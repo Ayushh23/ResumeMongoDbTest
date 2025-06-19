@@ -11,7 +11,7 @@ from bson.objectid import ObjectId
 import google.generativeai as genai
 
 # ================== CONFIG ======================
-MONGO_URI = "mongodb+srv://ayushsuryavanshi03:<ayushsuryavanshi03>@cluster0.i9n9dqa.mongodb.net/?retryWrites=true&w=majority"
+MONGO_URI = "mongodb+srv://ayushsuryavanshi03:ayushsuryavanshi03@cluster0.i9n9dqa.mongodb.net/?retryWrites=true&w=majority"
 DB_NAME = "resume_analyzer"
 COLLECTION_NAME = "prompts"
 
