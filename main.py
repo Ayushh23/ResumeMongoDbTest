@@ -94,13 +94,13 @@ Provide a detailed report that includes:
 
 class PromptUpdate(BaseModel):
     prompt_text: str
-    prompt_id: str
+    prompt_id: int
 
 @app.post("/update_prompt")
 async def update_prompt(data: PromptUpdate, request: Request):
     try:
         result = prompt_collection.update_one(
-            {"prompt_id": int(data.prompt_id)},  # ✅ Use prompt_id instead of _id
+            {"prompt_id": int(data.prompt_id)},  # ✅ Match numeric prompt_id field in DB
             {"$set": {"prompt_text": data.prompt_text}}
         )
         if result.modified_count == 1:
@@ -108,6 +108,7 @@ async def update_prompt(data: PromptUpdate, request: Request):
         return {"status": False, "error": "Prompt not found or unchanged."}
     except Exception as e:
         return {"status": False, "error": str(e)}
+
 
 
 @app.get("/debug_prompts")
