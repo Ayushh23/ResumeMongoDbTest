@@ -99,20 +99,22 @@ class PromptUpdate(BaseModel):
 @app.post("/update_prompt")
 async def update_prompt(data: PromptUpdate, request: Request):
     try:
-        result = prompt_collection.update_one({"_id": ObjectId(data.prompt_id)}, {"$set": {"prompt_text": data.prompt_text}})
+        result = prompt_collection.update_one(
+            {"prompt_id": int(data.prompt_id)},  # ✅ Use prompt_id instead of _id
+            {"$set": {"prompt_text": data.prompt_text}}
+        )
         if result.modified_count == 1:
             return {"status": True}
         return {"status": False, "error": "Prompt not found or unchanged."}
     except Exception as e:
         return {"status": False, "error": str(e)}
 
+
 @app.get("/debug_prompts")
 async def debug_prompts():
     try:
-        prompts = list(prompt_collection.find({}, {"prompt_text": 1}))
-        for prompt in prompts:
-            prompt["prompt_id"] = str(prompt["_id"])
-            del prompt["_id"]
+        # Only get prompt_id and prompt_text from the database
+        prompts = list(prompt_collection.find({}, {"prompt_id": 1, "prompt_text": 1, "_id": 0}))
         return {"prompts": prompts}
     except Exception as e:
         return {"status": False, "error": str(e)}
